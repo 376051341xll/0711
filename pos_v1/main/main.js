@@ -89,7 +89,8 @@ function printReceipt(inputs) {
   var print = "***<没钱赚商店>收据***\n" + itemStrings + "\n----------------------\n" + "总计：" + total.toFixed(2) + "(元)\n" + "节省：" + (Total-total).toFixed(2) + "(元)\n" + "**********************";
   console.log(print);
 }
-/*      'ITEM000001',
+var inputs=[
+      'ITEM000001',
       'ITEM000001',
       'ITEM000001',
       'ITEM000001',
@@ -99,4 +100,4 @@ function printReceipt(inputs) {
       'ITEM000005-2.0',
     ];
 
-printReceipt(inputs);*/
+printReceipt(inputs);
