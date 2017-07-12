@@ -82,9 +82,7 @@ function processInput(inputs) {
 
 
 function buildSingleItem(receiptItem) {
-  return `名称：${receiptItem.name}，数量：${receiptItem.count}${receiptItem.unit}，
-  单价：${receiptItem.price}(元)，小计：${receiptItem.subTotal}(元)`
-
+  return `名称：${receiptItem.name}，数量：${receiptItem.count}${receiptItem.unit}，单价：${receiptItem.price.toFixed(2)}(元)，小计：${receiptItem.subTotal.toFixed(2)}(元)`
 }
 
 function printReceipt(inputs) {
@@ -92,12 +90,11 @@ function printReceipt(inputs) {
   let inputs1 = SameInputs(inputs);
   let inputs2 = MatchItems(inputs1);
   let receiptItems2 = processInput(inputs2);
-  //let receiptItems2 = loadPromotions(receiptItems)
   let total = 0;
   let Total = 0;
   for (let index = 0; index < receiptItems2.length; index ++) {
-    if (index != receiptItems2.length2 - 1) {
-      itemStrings += buildSingleItem(receiptItems2[index]) + '\n';
+    if (index != receiptItems2.length-1) {
+      itemStrings += buildSingleItem(receiptItems2[index]) +'\n';
     } else {
       itemStrings += buildSingleItem(receiptItems2[index]);
     }
@@ -106,10 +103,8 @@ function printReceipt(inputs) {
   }
   console.log( `***<没钱赚商店>收据***
 ${itemStrings}
-
 ----------------------      
 总计：${total.toFixed(2)}(元)
-
 节省：${(Total-total).toFixed(2)}(元)
 **********************`);
 }
