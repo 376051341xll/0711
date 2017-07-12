@@ -31,9 +31,7 @@ function processInput(inputs) {
 }
 
 function buildSingleItem(receiptItem) {
-  return `名称：${receiptItem.name}，数量：${receiptItem.count}${receiptItem.unit}，单价：${receiptItem.price.toFixed(2)}(元)，小计：${receiptItem.subTotal.toFixed(2)}(元)
-  `
-
+  return `名称：${receiptItem.name}，数量：${receiptItem.count}${receiptItem.unit}，单价：${receiptItem.price.toFixed(2)}(元)，小计：${receiptItem.subTotal.toFixed(2)}(元)`
 }
 
 function printReceipt(inputs) {
@@ -42,19 +40,14 @@ function printReceipt(inputs) {
   let receiptItems = processInput(inputs2);
   let total = 0;
   for (let index = 0; index < receiptItems.length; index ++) {
-    if (index != receiptItems.length - 1) {
+    if (index != (receiptItems.length -1)) {
       itemStrings += buildSingleItem(receiptItems[index]) + '\n';
     } else {
       itemStrings += buildSingleItem(receiptItems[index]);
     }
     total += receiptItems[index].subTotal;
   }
-  console.log( `***<没钱赚商店>收据***
-${itemStrings}
-
-----------------------      
-总计：${total.toFixed(2)}(元)
-**********************`);
+  console.log( `***<没钱赚商店>收据***\n${itemStrings}\n----------------------\n总计：${total.toFixed(2)}(元)\n**********************`);
 }
 
 let inputs=[
