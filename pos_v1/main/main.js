@@ -1,9 +1,7 @@
 'use strict';
-
-'use strict';
-
 function SameInputs(inputs) 
 {
+	//inputs = inputs.sort(String(inputs).substring(10,0));
     var inputs1 = [];
     for (var i = 0; i < inputs.length; ++i ) 
     {
@@ -22,16 +20,11 @@ function SameInputs(inputs)
         	object.count += parseFloat(String(inputs[i]).substr(11,14))-1;
         }
         inputs1.push(object);
-    }
-    
-        return inputs1;
-    
+    } 
+        return inputs1;    
 }
-
-
 function MatchItems(inputs)
 {
-
 	for(var i=0; i<inputs.length; i++)
 	{
 		switch(inputs[i].barcode)
@@ -44,7 +37,7 @@ function MatchItems(inputs)
 			case "ITEM000001":
 				inputs[i].name='雪碧';
 				inputs[i].price=3.00;
-				inputs[i].unit='瓶;'
+				inputs[i].unit='瓶'
 				break;
 			case "ITEM000003":
 				inputs[i].name='荔枝';
@@ -55,11 +48,9 @@ function MatchItems(inputs)
 	}
 	return inputs;
 }
-
 function processInput(inputs) {
   let receiptItems = [];
-  for (let item of inputs) 
-  {
+  for (let item of inputs)  {
     receiptItems.push({
       barcode:item.barcode,
       name: item.name,
@@ -70,21 +61,15 @@ function processInput(inputs) {
       subTotal: item.price * item.count
     });
    }
-
-    for (var i=0; i<receiptItems.length; i++) 
-  {
+    for (var i=0; i<receiptItems.length; i++)  {
   	if(receiptItems[i].barcode == 'ITEM000001' || receiptItems[i].barcode == 'ITEM000005' )
   		receiptItems[i].subTotal=receiptItems[i].price * (receiptItems[i].count-1);
   }
   return receiptItems;
 }
-
-
-
 function buildSingleItem(receiptItem) {
   return `名称：${receiptItem.name}，数量：${receiptItem.count}${receiptItem.unit}，单价：${receiptItem.price.toFixed(2)}(元)，小计：${receiptItem.subTotal.toFixed(2)}(元)`
 }
-
 function printReceipt(inputs) {
   let itemStrings = "";
   let inputs1 = SameInputs(inputs);
@@ -101,15 +86,10 @@ function printReceipt(inputs) {
     Total += receiptItems2[index].subtotal;
     total += receiptItems2[index].subTotal;
   }
-  console.log( `***<没钱赚商店>收据***
-${itemStrings}
-----------------------      
-总计：${total.toFixed(2)}(元)
-节省：${(Total-total).toFixed(2)}(元)
-**********************`);
+  var print = "***<没钱赚商店>收据***\n" + itemStrings + "\n----------------------\n" + "总计：" + total.toFixed(2) + "(元)\n" + "节省：" + (Total-total).toFixed(2) + "(元)\n" + "**********************";
+  console.log(print);
 }
-var inputs = [
-      'ITEM000001',
+/*      'ITEM000001',
       'ITEM000001',
       'ITEM000001',
       'ITEM000001',
@@ -119,4 +99,4 @@ var inputs = [
       'ITEM000005-2.0',
     ];
 
-printReceipt(inputs);
+printReceipt(inputs);*/
