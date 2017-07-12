@@ -2,15 +2,148 @@
 
 function SameInputs(inputs) 
 {
-    inputs.sort();
+    inputs = inputs.sort();
+    var inputs1 = [];
+    for (var i = 0; i < inputs.length; ++i ) 
+    {
+       var object = new Object();
+       object.barcode = String(inputs[i]).substring(10,0)
+       var index= i + 1;
+       while (String(inputs[i]).substring(10,0)== String(inputs[i+1]).substring(10,0)&& index<inputs.length) //why can't use split() function?
+         {
+          inputs.splice(i,1);
+          index++;
+         }
+       ;
+       object.count = index- i;
+       if(String(inputs[i]).length >10)
+          {
+            object.count += parseFloat(String(inputs[i]).substr(11))-1;
+          }
+        inputs1.push(object);
+    } 
+        return inputs1;    
+}
+
+function loadAllItems() {
+  return [
+    {
+      barcode: 'ITEM000000',
+      name: '可口可乐',
+      unit: '瓶',
+      price: 3.00
+    },
+    {
+      barcode: 'ITEM000001',
+      name: '雪碧',
+      unit: '瓶',
+      price: 3.00
+    },
+    {
+      barcode: 'ITEM000002',
+      name: '苹果',
+      unit: '斤',
+      price: 5.50
+    },
+    {
+      barcode: 'ITEM000003',
+      name: '荔枝',
+      unit: '斤',
+      price: 15.00
+    },
+    {
+      barcode: 'ITEM000004',
+      name: '电池',
+      unit: '个',
+      price: 2.00
+    },
+    {
+      barcode: 'ITEM000005',
+      name: '方便面',
+      unit: '袋',
+      price: 4.50
+    }
+  ];
+}
+
+function MatchItems(inputs)
+{
+  let loadAllItem = [];
+  loadAllItem = loadAllItems();
+  for(var i=0; i<inputs.length; i++)
+    for(let j =0; j <loadAllItem.length; j++)
+  {
+    if(inputs[i].barcode == loadAllItem[j].barcode)
+    {
+      inputs[i].name=loadAllItem[j].name;
+      inputs[i].price=loadAllItem[j].price;
+      inputs[i].unit=loadAllItem[j].unit;
+    }
+  }
+  return inputs;
+}
+
+
+function processInput(inputs) {
+  let receiptItems = [];
+  for (let item of inputs)  {
+    receiptItems.push({
+      barcode:item.barcode,
+      name: item.name,
+      unit: item.unit,
+      price: item.price,
+      count: item.count,
+      subTotal: item.price * item.count
+    });
+   }
+  return receiptItems;
+}
+function buildSingleItem(receiptItem) {
+  return `名称：${receiptItem.name}，数量：${receiptItem.count}${receiptItem.unit}，单价：${receiptItem.price.toFixed(2)}(元)，小计：${receiptItem.subTotal.toFixed(2)}(元)`
+}
+function printReceipt(inputs) {
+  let itemStrings = "";
+  let inputs1 = SameInputs(inputs);
+  let inputs2 = MatchItems(inputs1);
+  let receiptItems2 = processInput(inputs2);
+  let Total = 0;
+  for (let index = 0; index < receiptItems2.length; index ++) {
+    if (index != receiptItems2.length-1) {
+      itemStrings += buildSingleItem(receiptItems2[index]) +'\n';
+    } else {
+      itemStrings += buildSingleItem(receiptItems2[index]);
+    }
+    Total += receiptItems2[index].subTotal;
+  }
+  var print = "***<没钱赚商店>收据***\n" + itemStrings + "\n----------------------\n" + "总计：" + Total.toFixed(2) + "(元)\n" + "**********************";
+  console.log(print);
+}
+var inputs=[
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000001',
+      'ITEM000003-2.5',
+      'ITEM000005',
+      'ITEM000005-2',
+    ];
+
+printReceipt(inputs);
+
+
+/*'use strict';
+
+function SameInputs(inputs) 
+{
     var inputs1 = [];
     for (var i = 0; i < inputs.length; ++i ) 
     {
         var index= i + 1;
-        while (inputs[i] === inputs[index] && index<inputs.length)
+        while (inputs[i] === inputs[i+1] && index<inputs.length)
          {
-         	inputs.splice(index,1);
-            index++;
+         	inputs.splice(i,1);
+          index++;
          }
         var object = new Object();
         object.barcode = inputs[i];
@@ -21,31 +154,64 @@ function SameInputs(inputs)
 }
 
 
+function loadAllItems() {
+  return [
+    {
+      barcode: 'ITEM000000',
+      name: '可口可乐',
+      unit: '瓶',
+      price: 3.00
+    },
+    {
+      barcode: 'ITEM000001',
+      name: '雪碧',
+      unit: '瓶',
+      price: 3.00
+    },
+    {
+      barcode: 'ITEM000002',
+      name: '苹果',
+      unit: '斤',
+      price: 5.50
+    },
+    {
+      barcode: 'ITEM000003',
+      name: '荔枝',
+      unit: '斤',
+      price: 15.00
+    },
+    {
+      barcode: 'ITEM000004',
+      name: '电池',
+      unit: '个',
+      price: 2.00
+    },
+    {
+      barcode: 'ITEM000005',
+      name: '方便面',
+      unit: '袋',
+      price: 4.50
+    }
+  ];
+}
+
+
+
 function MatchItems(inputs)
 {
-
-	for(var i=0; i<inputs.length; i++)
-	{
-		switch(inputs[i].barcode)
-		{
-			case "ITEM000000": 
-				inputs[i].name='可口可乐';
-				inputs[i].price=3.00;
-				inputs[i].unit='瓶';
-				break;
-			case "ITEM000001":
-				inputs[i].name='雪碧';
-				inputs[i].price=3.00;
-				inputs[i].unit='瓶;'
-				break;
-			case "ITEM000004":
-				inputs[i].name='电池';
-				inputs[i].price=2.00;
-				inputs[i].unit='个';
-				break;
-		}
-	}
-	return inputs;
+  let loadAllItem = [];
+  loadAllItem = loadAllItems();
+  for(var i=0; i<inputs.length; i++)
+    for(let j =0; j <loadAllItem.length; j++)
+  {
+    if(inputs[i].barcode == loadAllItem[j].barcode)
+    {
+      inputs[i].name=loadAllItem[j].name;
+      inputs[i].price=loadAllItem[j].price;
+      inputs[i].unit=loadAllItem[j].unit;
+    }
+  }
+  return inputs;
 }
 
 function processInput(inputs) {
@@ -64,9 +230,7 @@ function processInput(inputs) {
 }
 
 function buildSingleItem(receiptItem) {
-  return `名称：${receiptItem.name}，数量：${receiptItem.count}${receiptItem.unit}，
-  单价：${receiptItem.price}(元)，小计：${receiptItem.subTotal}(元)`
-
+  return `名称：${receiptItem.name}，数量：${receiptItem.count}${receiptItem.unit}，单价：${receiptItem.price.tofixed(2)}(元)，小计：${receiptItem.subTotal.tofixed(2)}(元)`
 }
 
 function printReceipt(inputs) {
@@ -83,12 +247,7 @@ function printReceipt(inputs) {
     }
     total += receiptItems[index].subTotal;
   }
-  console.log( `***<没钱赚商店>收据***
-${itemStrings}
-
-----------------------      
-总计：${total.toFixed(2)}(元)
-**********************`);
+  console.log( `***<没钱赚商店>收据***\n${itemStrings}\n----------------------\n总计：${total.toFixed(2)}(元)\n**********************`);
 }
 var inputs = [
       'ITEM000000',
@@ -101,4 +260,4 @@ var inputs = [
       'ITEM000004'
     ];
 
-printReceipt(inputs);
+printReceipt(inputs);*/
