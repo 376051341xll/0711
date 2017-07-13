@@ -2,7 +2,7 @@
 
 function SameInputs(inputs) 
 {
-	  inputs = inputs.sort();
+    inputs = inputs.sort();
     var inputs1 = [];
     for (var i = 0; i < inputs.length; ++i ) 
     {
@@ -70,17 +70,17 @@ function MatchItems(inputs)
 {
   let loadAllItem = [];
   loadAllItem = loadAllItems();
-	for(var i=0; i<inputs.length; i++)
+  for(var i=0; i<inputs.length; i++)
     for(let j =0; j <loadAllItem.length; j++)
-	{
+  {
     if(inputs[i].barcode == loadAllItem[j].barcode)
     {
       inputs[i].name=loadAllItem[j].name;
       inputs[i].price=loadAllItem[j].price;
       inputs[i].unit=loadAllItem[j].unit;
     }
-	}
-	return inputs;
+  }
+  return inputs;
 }
 
 function loadPromotions() {
@@ -96,8 +96,11 @@ function loadPromotions() {
   ];
 }
 
+function fix(num, length) {
+  return ('' + num).length < length ? ((new Array(length + 1)).join('0') + num).slice(-length) : '' + num;
+}
+
 function processInput(inputs) {
-  let Promotion = loadPromotions();
   let receiptItems = [];
   for (let item of inputs)  {
     receiptItems.push({
@@ -110,14 +113,20 @@ function processInput(inputs) {
       subTotal: item.price * item.count
     });
    }
+   return receiptItems;
+ }
 
+ function MatchPromotion(receiptItems)
+ {
+    let Promotion = loadPromotions();
     for (var i=0; i<receiptItems.length; i++)
-      for(let j=1; j<String(Promotion.barcodes).length; j++){
-  	if(receiptItems[i].barcode == Promotion[0].barcodes[j])
-  		receiptItems[i].subTotal=receiptItems[i].price * (receiptItems[i].count-1);
+    for(let j=1; j<String(Promotion.barcodes).length; j++){
+    if(receiptItems[i].barcode == Promotion[0].barcodes[j])
+      receiptItems[i].subTotal=receiptItems[i].price * (receiptItems[i].count-1);
     }
   return receiptItems;
 }
+
 function buildSingleItem(receiptItem) {
   return `名称：${receiptItem.name}，数量：${receiptItem.count}${receiptItem.unit}，单价：${receiptItem.price.toFixed(2)}(元)，小计：${receiptItem.subTotal.toFixed(2)}(元)`
 }
@@ -125,7 +134,9 @@ function printReceipt(inputs) {
   let itemStrings = "";
   let inputs1 = SameInputs(inputs);
   let inputs2 = MatchItems(inputs1);
-  let receiptItems2 = processInput(inputs2);
+  let receiptItems = processInput(inputs2);
+  let receiptItems2 = MatchPromotion(receiptItems);
+
   let total = 0;
   let Total = 0;
   for (let index = 0; index < receiptItems2.length; index ++) {
