@@ -1,0 +1,265 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="./bootstrap-3.3.7-dist/css/bootstrap.css">
+        <script src="./jquery-3.2.1.js"></script>        
+        <script src="./bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    </head>
+<style>
+  .rightbox{
+   background-color:white;
+    margin-top:5%;
+    margin-bottom: 5%;
+    margin-left:10%;
+    margin-right:10%;
+  }
+  .leftbox{
+    background-color:white;
+    margin-bottom:5%;
+    margin-right:10%;
+    margin-left:10%
+
+  
+  }
+  </style>
+
+
+<!DOCTYPE HTML>
+
+<html>
+
+
+<head>
+<script>
+    var students=[];
+
+function isStudentMatching() {
+    var input=testform.fname.value; 
+    let result = true;
+    let inputArr = input.split(',');
+    if (inputArr.length > 4) {
+        for (let i = 4; i < inputArr.length; i++) {
+            let grade = inputArr[i].split(':');
+            if (parseInt(grade[1]) == NaN) {
+                console.log(parseInt(grade[1]))
+                result = false;
+            }
+        }
+    } else {
+        result = false;
+    }
+    if(result===true){
+        addStudentInfo();
+        var xuehao =(JSON.stringify(inputArr[1])).replace(" ","");;
+        var xinxi = (JSON.stringify(inputArr)).replace(" ","");;
+         addStudentInfo();
+        localStorage.setItem(xuehao, xinxi);
+        alert("格式正确，学生已添加");
+    }
+    else{
+         alert("格式不正确，请按正确格式输入");
+    }
+}
+
+function isStudentMatching2() {
+    var input=document.getElementById("xiugai").value;
+    let result = true;
+    let inputArr = input.split(',');
+    if (inputArr.length > 4) {
+        for (let i = 4; i < inputArr.length; i++) {
+            let grade = inputArr[i].split(':');
+            if (parseInt(grade[1]) == NaN) {
+                console.log(parseInt(grade[1]))
+                result = false;
+            }
+        }
+    } else {
+        result = false;
+    }
+    if(result===true){
+        addStudentInfo();
+        var xuehao =(JSON.stringify(inputArr[1])).replace(" ","");;
+        var xinxi = (JSON.stringify(inputArr)).replace(" ","");;
+         addStudentInfo();
+        localStorage.setItem(xuehao, xinxi);
+        alert("格式正确，学生已添加");
+    }
+    else{
+         alert("格式不正确，请按正确格式输入");
+    }
+}
+
+function addStudentInfo() { 
+      //xll, 0101, 蒙古族, 2,chinese: 90, math: 95, english: 98, programming: 100
+   var input=testform.fname.value; 
+   var inputArr = input.split(',');
+    var student = {
+        name: inputArr[0],
+        studentNo: inputArr[1],
+        ethnic: inputArr[2],
+        klass: inputArr[3],
+        grades: new Map(),
+    };
+    var Grade=[];
+    for (var i = 4; i < inputArr.length; i++) {
+         var grade = inputArr[i].split(':');
+         Grade.push(grade);
+        student.grades.set(grade[0].trim(), grade[1].trim());
+        students.push(student);
+    }
+    return students;
+}
+
+</script>
+</head>
+
+
+<body>
+
+ 
+<div class="leftbox">
+
+
+<form  name="testform" onsubmit="isStudentMatching()">
+<h4>请输入学生信息（格式：姓名, 学号, 民族, 班级, 学科: 成绩, ...），按确认提交：</h4><br />
+输入信息：<input id="nn" style="width:420px" name="fname" ></input>
+<input type="submit" value="添加" />
+
+
+
+</form>
+</div>
+
+
+<div  class="rightbox" >
+  <h3><b>显示学生成绩</b></h3>
+<table class="table table-bordered">
+    <thead>
+   <tr>
+       <td align="center"><b>#</b></td>
+        <td align="center"><b>姓名</b></td>
+        <td align="center"><b>学号</b></td>
+        <td align="center"><b>语文</b></td>
+        <td align="center"><b>数学</b></td>
+        <td align="center"><b>英语</b></td>
+        <td align="center"><b>编程</b></td>
+        <td align="center"><b>总分</b></td>
+        <td align="center"><b>平均分</b></td>
+    </tr>
+    <tr>
+        <td align="center">1</td>
+        <td align="center">许玲玲</td>
+        <td align="center">2015210781</td>
+        <td align="center">100</td>
+        <td align="center">100</td>
+        <td align="center">100</td>
+        <td align="center">100</td>
+        <td align="center">400</td>
+        <td align="center">100</td>
+    </tr>
+    <div id="present">
+    </div>
+</tr>
+    
+  
+</div>
+    
+</table>
+
+<div id="list" class="rightbox">
+    <h1><br></h1>
+</div>
+
+<form>
+<label for="search_phone">输入学号：</label>  
+        <input type="text" id="xuehao" name="xuehao"/>  
+        <input type="button" onclick="find()" value="查找"/>
+         <input id="xiugai" type="text" style="width:420px" id="xiugai" name="xiugai"/>
+         <input  type="button" onclick="isStudentMatching2()" value="修改"/>  
+         <input  type="button" onclick="shanchu()" value="删除"/>  
+        <p id="find_result"><br/></p>  
+</form>
+
+
+
+
+  </body>
+
+<script>
+    
+    loadAll();
+   //查找
+
+
+
+    function find(){ 
+
+        var xuehao =document.getElementById("xuehao").value;
+        var xuehaoArr=xuehao.split(",");
+       for(let m=0; m<xuehaoArr.length; m++)
+       {
+           xuehaoArr[m]=JSON.stringify(xuehaoArr[m]);
+       }
+       var xinxi;
+        var find_result = document.getElementById("find_result");  
+        for(let n=0; n<xuehaoArr.length;n++) {
+       for(var i=0;i<localStorage.length;i++){
+                var xuehao2 = localStorage.key(i);
+                if(xuehaoArr[n]==xuehao2){
+                 xinxi =  localStorage.getItem(xuehao2);
+                  find_result.innerHTML += xuehaoArr[n] + "的信息是：" + xinxi + `<br>`;
+                }
+            }
+         //   find_result.innerHTML = xuehao + "的信息是：" + xinxi;  
+           alert(xinxi);
+           document.getElementById("xiugai").value=JSON.parse(xinxi);
+        }
+ }
+
+ function shanchu(){
+     var xuehao =document.getElementById("xuehao").value;
+     alert("确定删除"+xuehao+"同学成绩");
+        var xuehaoArr=xuehao.split(",");
+       for(let m=0; m<xuehaoArr.length; m++)
+       {
+           xuehaoArr[m]=JSON.stringify(xuehaoArr[m]);
+       }
+       var xinxi;
+        var find_result = document.getElementById("find_result");  
+        for(let n=0; n<xuehaoArr.length;n++) {
+       for(var i=0;i<localStorage.length;i++){
+                var xuehao2 = localStorage.key(i);
+                if(xuehaoArr[n]==xuehao2){
+                 
+                 localStorage.removeItem(xuehao2);
+                }
+            }
+        }
+ }
+
+
+    //将所有存储在localStorage中的对象提取出来，并展现到界面上
+    function loadAll(){
+        var list = document.getElementById("list");
+        if(localStorage.length>0){
+            var result = "<table border='-4'>";
+            result += "<tr><td>学号</td><td>学生信息</td></tr>";
+            for(var i=0;i<localStorage.length;i++){
+                var xuehao = localStorage.key(i);
+                var info = localStorage.getItem(xuehao);
+        
+                result += "<tr><td>"+xuehao+"</td><td>"+info+"</td></tr>";
+            }
+            result += "</table>";
+            list.innerHTML = result;
+        }else{
+            list.innerHTML = "帅哥，数据为空……";
+        }
+
+
+    }
+
+
+ </script>
+
+
+</html>
